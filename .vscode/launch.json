@@ -1,0 +1,42 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch",
+      "type": "mono",
+      "request": "launch",
+      "program": "${workspaceFolder}/BlocksHero/bin/Debug/BlocksHero.exe",
+      "cwd": "${workspaceFolder}/BlocksHero/bin/Debug/",
+      "preLaunchTask": "Build (Debug)",
+      "osx": {
+        "env": {
+          "DYLD_LIBRARY_PATH": "./osx/"
+        }
+      }
+    },
+
+    {
+      "name": "Launch Without Building",
+      "type": "mono",
+      "request": "launch",
+      "program": "${workspaceFolder}/BlocksHero/bin/Debug/BlocksHero.exe",
+      "cwd": "${workspaceFolder}/BlocksHero/bin/Debug/",
+      "osx": {
+        "env": {
+          "DYLD_LIBRARY_PATH": "./osx/"
+        }
+      }
+    },
+
+    {
+      "name": "Attach",
+      "type": "mono",
+      "request": "attach",
+      "address": "localhost",
+      "port": 55555
+    }
+  ]
+}

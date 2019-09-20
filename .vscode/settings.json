@@ -1,0 +1,11 @@
+{
+    "omnisharp.autoStart": true,
+
+    "csharp.referencesCodeLens.enabled": false,
+    "files.exclude": {
+        "fnalibs": true,
+        "CreateTemplate": true,
+        "FNATemplate": true,
+        "FNA/[^src]*": false // hide everything but the src folder
+    }
+}

@@ -22,12 +22,11 @@ namespace BlocksHero
             Content.RootDirectory = "Content";
 
             fontService = new FontService(this);
-            fontService.SetFont(@"/System/Library/Fonts/PingFang.ttc");
+            fontService.addFontFace("normal", 16, @"/System/Library/Fonts/PingFang.ttc");
 
             Window.AllowUserResizing = true;
             IsMouseVisible = true;
         }
-
 
         SpriteBatch spriteBatch;
         Texture2D font;
@@ -39,10 +38,10 @@ namespace BlocksHero
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            font = fontService.toTexture2D("一二三assd四五dsad六七八123九", 100);
+            font = fontService.toTexture2D("normal", "一二三assd四五dsad六七八123九", 100);
 
-            /* smile = Content.Load<Texture2D>("Smile"); */
-            smile = Texture2D.FromStream(GraphicsDevice, File.OpenRead(@"Content/Smile.png"));
+            smile = Content.Load<Texture2D>("Smile");
+            /* smile = Texture2D.FromStream(GraphicsDevice, File.OpenRead(@"Content/Smile.png")); */
 
             // Effects need to be loaded from files built by fxc.exe from the DirectX SDK (June 2010)
             // (Note how each .fx file has the Build Action "CompileShader", which produces a .fxb file.)
@@ -60,8 +59,6 @@ namespace BlocksHero
 
             base.UnloadContent();
         }
-
-
 
         protected override void Update(GameTime gameTime)
         {
@@ -100,9 +97,9 @@ namespace BlocksHero
             spriteBatch.Draw(font, new Vector2(20, 20), Color.White);
             spriteBatch.End();
 
-            /* spriteBatch.Begin(0, null, null, null, null);
-            spriteBatch.Draw(smile, new Vector2(20, 60), Color.White);
-            spriteBatch.End(); */
+            spriteBatch.Begin(0, null, null, null, null);
+            spriteBatch.Draw(smile, new Vector2(20, 20 + font.Height), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

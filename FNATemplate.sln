@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNATemplate", "FNATemplate\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "FNA\FNA.csproj", "{35253CE1-C864-4CD3-8249-4D1319748E8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateTemplate", "CreateTemplate\CreateTemplate.csproj", "{F6DF8289-8138-41C7-B747-E672AFEE44A4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlocksHero", "BlocksHero\BlocksHero.csproj", "{03A597B8-FA6F-481E-9C25-47FB2AF3A0E3}"
 EndProject
 Global

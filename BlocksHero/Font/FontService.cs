@@ -1,4 +1,6 @@
 using System;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 using SharpFont;
 
@@ -7,21 +9,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BlocksHero
 {
-    internal class FontService : IDisposable
+    internal class FontService
     {
-        private Library lib;
+        private Library Lib;
         private Game Game;
 
         #region Properties
 
-        internal Face FontFace { get { return _fontFace; } }
-        private Face _fontFace;
-
-        internal uint Size
-        {
-            get { return _size; }
-        }
-        private uint _size;
+        private Dictionary<string, FontFace> FontFaces;
 
         #endregion // Properties
 
@@ -30,38 +25,44 @@ namespace BlocksHero
         internal FontService(Game game)
         {
             Game = game;
-            lib = new Library();
-            _size = 16;
+            Lib = new Library();
+            FontFaces = new Dictionary<string, FontFace>();
+
+            Game.Services.AddService(typeof(FontService), this);
         }
 
         #endregion
 
-        #region Setters
+        #region Protected Methods
 
-        internal void SetFont(String filename)
+        internal FontFace getFontFace(string name)
         {
-            _fontFace = new Face(lib, filename);
-            SetSize(Size);
-        }
-
-        internal void SetSize(uint size)
-        {
-            _size = size;
-
-            if (FontFace != null)
+            try
             {
-                uint times = Environment.GetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI") == "1" ? 2u : 1u;
-                FontFace.SetPixelSizes(0, _size * times);
+                return FontFaces[name];
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new KeyNotFoundException("FontFace not found", ex);
             }
         }
 
-        #endregion // Setters
-
-        #region Caches
-
-        public Texture2D toTexture2D(String text, int wrapWidth)
+        internal FontFace addFontFace(string name, uint size, string path)
         {
-            Face face = FontFace;
+            var fontFace = new FontFace(Lib, path, size);
+
+            FontFaces.Add(name, fontFace);
+
+            return fontFace;
+        }
+
+        #endregion
+
+        #region Texture
+
+        public Texture2D toTexture2D(string fontFaceName, String text, int wrapWidth)
+        {
+            Face face = getFontFace(fontFaceName).Face;
 
             float penX = 0, penY = 0;
             float stringWidth = 0; // the measured width of the string
@@ -224,6 +225,7 @@ namespace BlocksHero
                 {
                     var length = ftbmp.Width * ftbmp.Rows;
                     var data = new ushort[length];
+                    var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
 
                     // 8-bit to 16-bit
                     for (int j = 0; j < length; j++)
@@ -291,46 +293,5 @@ namespace BlocksHero
         }
 
         #endregion
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    if (this.FontFace != null && !FontFace.IsDisposed)
-                        try
-                        {
-                            FontFace.Dispose();
-                        }
-                        catch { }
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~FontService() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
     }
-
 }

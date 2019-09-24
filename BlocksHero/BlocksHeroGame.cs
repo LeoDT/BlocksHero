@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-using SharpFont;
 
 namespace BlocksHero
 {
     class BlocksHeroGame : Game
     {
         GraphicsDeviceManager graphics;
+        FontService fontService;
 
         public BlocksHeroGame()
         {
@@ -32,16 +29,14 @@ namespace BlocksHero
         Texture2D font;
         Texture2D smile;
         Effect exampleEffect;
-        FontService fontService;
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            font = fontService.toTexture2D("normal", "一二三assd四五dsad六七八123九", 100);
+            font = fontService.toTexture2D("normal", "一二三d四五dd六2七八123九", 100);
 
             smile = Content.Load<Texture2D>("Smile");
-            /* smile = Texture2D.FromStream(GraphicsDevice, File.OpenRead(@"Content/Smile.png")); */
 
             // Effects need to be loaded from files built by fxc.exe from the DirectX SDK (June 2010)
             // (Note how each .fx file has the Build Action "CompileShader", which produces a .fxb file.)
@@ -97,9 +92,9 @@ namespace BlocksHero
             spriteBatch.Draw(font, new Vector2(20, 20), Color.White);
             spriteBatch.End();
 
-            spriteBatch.Begin(0, null, null, null, null);
+            /* spriteBatch.Begin(0, null, null, null, null);
             spriteBatch.Draw(smile, new Vector2(20, 20 + font.Height), Color.White);
-            spriteBatch.End();
+            spriteBatch.End(); */
 
             base.Draw(gameTime);
         }

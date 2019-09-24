@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
 using SharpFont;
@@ -70,9 +69,8 @@ namespace BlocksHero
             float overrun = 0;
             float underrun = 0;
             float kern = 0;
-            int spacingError = 0;
             bool trackingUnderrun = true;
-            int rightEdge = 0; // tracking rendered right side for debugging
+            int wrapCount = 1;
 
             // Bottom and top are both positive for simplicity.
             // Drawing in .Net has 0,0 at the top left corner, with positive X to the right
@@ -143,6 +141,15 @@ namespace BlocksHero
                 // Accumulate the distance between the origin of each character (simple width).
                 stringWidth += gAdvanceX;
 
+                if (penX + gAdvanceX >= wrapWidth)
+                {
+                    penX = 0;
+                    wrapCount += 1;
+                }
+
+                // Advance pen positions for drawing the next character, calculate wrap.
+                penX += gAdvanceX;
+
                 #region Kerning (for NEXT character)
                 // Calculate kern for the NEXT character (if any)
                 // The kern value adjusts the origin of the next character (positive or negative).
@@ -168,9 +175,9 @@ namespace BlocksHero
             int tWidth = (int)stringWidth;
             int tHeight = (int)stringHeight;
 
-            if (wrapWidth != 0)
+            if (wrapWidth != 0 && wrapCount > 1)
             {
-                tHeight = (int)Math.Ceiling(stringWidth / wrapWidth) * tHeight;
+                tHeight = wrapCount * tHeight;
                 tWidth = wrapWidth;
             }
 
@@ -185,6 +192,7 @@ namespace BlocksHero
             trackingUnderrun = true;
             underrun = 0;
             overrun = 0;
+            penX = 0;
             stringWidth = 0;
 
             // Draw the string into the bitmap.
@@ -225,7 +233,6 @@ namespace BlocksHero
                 {
                     var length = ftbmp.Width * ftbmp.Rows;
                     var data = new ushort[length];
-                    var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
 
                     // 8-bit to 16-bit
                     for (int j = 0; j < length; j++)
@@ -248,15 +255,6 @@ namespace BlocksHero
                     var rect = new Rectangle(x, y, ftbmp.Width, ftbmp.Rows);
 
                     tx.SetData(0, rect, data, 0, data.Length);
-
-                    // Check if we are aligned properly on the right edge (for debugging)
-                    rightEdge = Math.Max(rightEdge, x + ftbmp.Width);
-                    spacingError = ftbmp.Width - rightEdge;
-                }
-                else
-                {
-                    rightEdge = (int)(penX + gAdvanceX);
-                    spacingError = ftbmp.Width - rightEdge;
                 }
                 #endregion
 

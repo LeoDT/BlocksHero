@@ -17,7 +17,7 @@ namespace BlocksHero.Tiles
             }
         }
 
-        public System.Drawing.Size Size { get; set; }
+        public Rectangle Size { get; set; }
 
         public Viewport()
         {
@@ -26,10 +26,10 @@ namespace BlocksHero.Tiles
 
     public class TileScene
     {
-        public int TilePixelSize { get; set; }
-        public System.Drawing.Size Size { get; set; }
-        public Viewport Viewport { get; set; }
-        public HashSet<TileGroup> TileGroups { get; set; }
+        public int TilePixelSize { get; private set; }
+        public Rectangle Size { get; private set; }
+        public Viewport Viewport { get; private set; }
+        public HashSet<TileGroup> TileGroups { get; private set; }
 
         public TileScene(int tilePixelSize, int tileWidth, int tileHeight, int viewportWidth, int viewportHeight)
         {
@@ -37,7 +37,7 @@ namespace BlocksHero.Tiles
             int height = tileHeight * tilePixelSize;
 
             TilePixelSize = tilePixelSize;
-            Size = new System.Drawing.Size(width, height);
+            Size = new Rectangle(0, 0, width, height);
             Viewport = new Viewport
             {
                 TileScene = this,
@@ -45,7 +45,7 @@ namespace BlocksHero.Tiles
                     width / 2 - viewportWidth / 2,
                     height / 2 - viewportHeight / 2
                 ),
-                Size = new System.Drawing.Size(viewportWidth, viewportHeight)
+                Size = new Rectangle(0, 0, viewportWidth, viewportHeight)
             };
         }
 
@@ -57,9 +57,9 @@ namespace BlocksHero.Tiles
             );
         }
 
-        public void AddTileGroup(TileGroup tileGroup)
+        public bool AddTileGroup(TileGroup tileGroup)
         {
-            TileGroups.Add(tileGroup);
+            return TileGroups.Add(tileGroup);
         }
 
         public bool CanTileGroupMoveToTile(

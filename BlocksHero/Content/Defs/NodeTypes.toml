@@ -1,0 +1,32 @@
+[[NodeType]]
+  Id = 1
+  Name = "Power"
+  Shape = "One"
+  BoardTypeId = 1
+  Cycle = 10
+
+  [[Output]]
+    ResourceTypeId = 1
+    Amount = 1
+
+[[NodeType]]
+  Id = 2
+  Name = "Attack"
+  Shape = "Three"
+  BoardTypeId = 1
+  Cycle = 15
+
+  [[Output]]
+    ResourceTypeId = 2
+    Amount = 1
+
+[[NodeType]]
+  Id = 3
+  Name = "Block"
+  Shape = "Five"
+  BoardTypeId = 1
+  Cycle = 15
+
+  [[Output]]
+    ResourceTypeId = 3
+    Amount = 1

@@ -7,5 +7,13 @@
         "CreateTemplate": true,
         "FNATemplate": true,
         "FNA/[^src]*": false // hide everything but the src folder
-    }
+    },
+
+    "editor.suggest.snippetsPreventQuickSuggestions": true,
+
+    "csproj.itemType": {
+        "*": "Content",
+        ".cs": "Compile"
+    },
+    "csproj.excludeRegex": "Content/"
 }

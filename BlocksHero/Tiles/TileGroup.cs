@@ -18,54 +18,33 @@ namespace BlocksHero.Tiles
             {
                 _rotateAngle = value;
 
-                this._transformedShape = null;
-                this._rectangles = null;
+                uint times = value / 90u;
+                this._transformedShape = new TileShape(
+                    TileShape.RotateBytes(TileShape.Shape, TileShape.Pitch, times),
+                    times % 2 == 0 ? TileShape.Pitch : TileShape.Height
+                );
+                this._rectangles = TileShape.convertShapeToRectangles(
+                    TransformedShape, Tile.X, Tile.Y
+                );
             }
         }
 
         private TileShape _transformedShape;
         public TileShape TransformedShape
         {
-            get
-            {
-                if (_transformedShape == null)
-                {
-                    uint times = RotateAngle / 90u;
-                    _transformedShape = new TileShape
-                    {
-                        Shape = TileShape.RotateBytes(TileShape.Shape, TileShape.Pitch, times),
-                        Pitch = times % 2 == 0 ? TileShape.Pitch : TileShape.Height
-                    };
-                }
-
-                return _transformedShape;
-            }
+            get => _transformedShape;
         }
 
         private List<Rectangle> _rectangles;
         public List<Rectangle> Rectangles
         {
-            get
-            {
-                if (_rectangles == null)
-                {
-                    _rectangles = TileShape.convertShapeToRectangles(TransformedShape, Tile.X, Tile.Y);
-                }
-
-                return _rectangles;
-            }
+            get => _rectangles;
         }
 
         public HashSet<TileGroup> Children { get; private set; }
 
         public TileGroup()
         {
-        }
-
-        public TileGroup(int x, int y, byte[] shape, int pitch)
-        {
-            Tile = new Tile { X = x, Y = y };
-            TileShape = new TileShape { Shape = shape, Pitch = pitch };
         }
 
         public static bool Intersect(TileGroup a, TileGroup b)

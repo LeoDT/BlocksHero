@@ -63,6 +63,9 @@
     <Reference Include="SharpFont">
       <HintPath>..\packages\SharpFont.4.0.1\lib\net45\SharpFont.dll</HintPath>
     </Reference>
+    <Reference Include="Nett">
+      <HintPath>..\packages\Nett.0.13.0\lib\net40\Nett.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetRebuild.cs" />
@@ -85,7 +88,17 @@
     <Compile Include="Tiles\TileGroup.cs" />
     <Compile Include="Tiles\TileShape.cs" />
     <Compile Include="Tiles\TileScene.cs" />
+    <Compile Include="Tiles\BlokusShape.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Components\Node.cs" />
+    <Compile Include="Definition\DefinitionService.cs" />
+    <Compile Include="Definition\DefinitionDict.cs" />
+    <Compile Include="Core\Resource.cs" />
+    <Compile Include="Core\BoardType.cs" />
+    <Compile Include="Core\NodeType.cs" />
+    <Compile Include="Core\Node.cs" />
+    <Compile Include="Core\ResourceType.cs" />
+    <Compile Include="Core\Board.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

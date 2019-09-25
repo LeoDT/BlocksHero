@@ -1,0 +1,19 @@
+[[ResourceType]]
+  Id = 1
+  Name = "Power"
+
+[[ResourceType]]
+  Id = 2
+  Name = "Slash"
+
+  [[ResourceRequirements]]
+    Id = 1
+    Amount = 2
+
+[[ResourceType]]
+  Id = 3
+  Name = "Block"
+
+  [[ResourceRequirements]]
+    Id = 1
+    Amount = 1

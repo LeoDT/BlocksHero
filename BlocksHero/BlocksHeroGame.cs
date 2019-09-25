@@ -1,7 +1,10 @@
 using System.IO;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using BlocksHero.Definition;
 
 namespace BlocksHero
 {
@@ -9,6 +12,7 @@ namespace BlocksHero
     {
         GraphicsDeviceManager graphics;
         FontService fontService;
+        DefinitionService defService;
 
         public BlocksHeroGame()
         {
@@ -20,6 +24,8 @@ namespace BlocksHero
 
             fontService = new FontService(this);
             fontService.addFontFace("normal", 16, @"/System/Library/Fonts/PingFang.ttc");
+
+            defService = new DefinitionService(this);
 
             Window.AllowUserResizing = true;
             IsMouseVisible = true;
@@ -34,13 +40,15 @@ namespace BlocksHero
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            defService.Load();
+
             font = fontService.toTexture2D("normal", "一二三d四五dd六2七八123九", 100);
 
             smile = Content.Load<Texture2D>("Smile");
 
             // Effects need to be loaded from files built by fxc.exe from the DirectX SDK (June 2010)
             // (Note how each .fx file has the Build Action "CompileShader", which produces a .fxb file.)
-            exampleEffect = new Effect(GraphicsDevice, File.ReadAllBytes(@"Effects/ExampleEffect.fxb"));
+            exampleEffect = new Effect(GraphicsDevice, TitleContainer.ReadAllBytes(@"Effects/ExampleEffect.fxb"));
 
             base.LoadContent();
         }
@@ -50,7 +58,11 @@ namespace BlocksHero
             Content.Unload();
 
             spriteBatch.Dispose();
-            exampleEffect.Dispose();
+
+            if (exampleEffect != null)
+            {
+                exampleEffect.Dispose();
+            }
 
             base.UnloadContent();
         }

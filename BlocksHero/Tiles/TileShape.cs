@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace BlocksHero.Tiles
 {
-    public class TileShape
+    public struct TileShape
     {
         public byte[] Shape { get; set; }
         public int Pitch { get; set; }
@@ -44,8 +44,22 @@ namespace BlocksHero.Tiles
             get { return Shape.Length; }
         }
 
-        public TileShape()
+        public TileShape(byte[] shape, int pitch)
         {
+            Shape = shape;
+            Pitch = pitch;
+        }
+
+        public TileShape(int width, int height)
+        {
+            var shape = new byte[width * height];
+            for (int i = 0; i < shape.Length; i++)
+            {
+                shape[i] = 1;
+            }
+
+            Shape = shape;
+            Pitch = width;
         }
 
         public static List<Rectangle> convertShapeToRectangles(TileShape tileShape, int offsetX, int offsetY)

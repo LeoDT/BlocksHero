@@ -1,12 +1,14 @@
 namespace BlocksHero.Tiles
 {
-    public class Tile
+    public struct Tile
     {
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Tile()
+        public Tile(int x, int y)
         {
+            X = x;
+            Y = y;
         }
 
         public static void Add(Tile value1, Tile value2, out Tile result)

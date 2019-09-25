@@ -1,0 +1,23 @@
+[[BoardType]]
+  Id = 1
+  Name = "Constitution"
+  Width = 6
+  Height = 4
+
+[[BoardType]]
+  Id = 2
+  Name = "Perception"
+  Width = 6
+  Height = 4
+
+[[BoardType]]
+  Id = 3
+  Name = "Will"
+  Width = 6
+  Height = 4
+
+[[BoardType]]
+  Id = 4
+  Name = "Enemy"
+  Width = 6
+  Height = 4

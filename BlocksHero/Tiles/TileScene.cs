@@ -64,19 +64,19 @@ namespace BlocksHero.Tiles
 
         public bool CanTileGroupMoveToTile(
             TileGroup tileGroup,
-            Tile tile,
+            Point tile,
             HashSet<TileGroup> excludedTileGroup = null
         )
         {
             excludedTileGroup = excludedTileGroup ?? new HashSet<TileGroup>();
 
             TileGroup newGroup = new TileGroup
-            {
-                Tile = tile,
-                TileShape = tileGroup.TransformedShape,
-                Rotatable = tileGroup.Rotatable,
-                Layer = tileGroup.Layer
-            };
+            (
+                tile,
+                tileGroup.TransformedShape,
+                tileGroup.Rotatable,
+                tileGroup.Layer
+            );
 
             foreach (var g in this.TileGroups)
             {
@@ -89,11 +89,8 @@ namespace BlocksHero.Tiles
 
                 foreach (var cg in tileGroup.Children)
                 {
-                    Tile newTile;
-                    Tile offset;
-
-                    Tile.Subtract(cg.Tile, tileGroup.Tile, out offset);
-                    Tile.Add(tile, offset, out newTile);
+                    var offset = cg.Tile - tileGroup.Tile;
+                    var newTile = tile + offset;
 
                     if (!CanTileGroupMoveToTile(cg, newTile, tileGroup.Children))
                     {

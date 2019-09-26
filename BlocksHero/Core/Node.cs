@@ -1,5 +1,7 @@
 using System;
 
+using Microsoft.Xna.Framework;
+
 using BlocksHero.Tiles;
 
 namespace BlocksHero.Core
@@ -11,20 +13,20 @@ namespace BlocksHero.Core
 
         public TileGroup TileGroup { get; set; }
 
-        public Node(NodeType type, Tile tile) : this(type, tile, Guid.NewGuid())
+        public Node(NodeType type, Point tile) : this(type, tile, Guid.NewGuid())
         {
         }
 
-        public Node(NodeType type, Tile tile, Guid id)
+        public Node(NodeType type, Point tile, Guid id)
         {
             Id = id;
             Type = type;
             TileGroup = new TileGroup
-            {
-                Tile = tile,
-                TileShape = BlokusShape.RandomTileShape(type.Shape),
-                Rotatable = true
-            };
+            (
+                tile,
+                BlokusShape.RandomTileShape(type.Shape),
+                true
+            );
         }
     }
 }

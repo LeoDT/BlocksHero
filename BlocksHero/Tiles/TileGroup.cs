@@ -5,10 +5,12 @@ namespace BlocksHero.Tiles
 {
     public class TileGroup
     {
-        public Tile Tile { get; set; }
+        public Point Tile { get; set; }
         public TileShape TileShape { get; set; }
         public bool Rotatable { get; set; }
         public int Layer { get; set; }
+
+        public byte[] ShapeMask { get; private set; }
 
         private uint _rotateAngle;
         public uint RotateAngle
@@ -18,14 +20,7 @@ namespace BlocksHero.Tiles
             {
                 _rotateAngle = value;
 
-                uint times = value / 90u;
-                this._transformedShape = new TileShape(
-                    TileShape.RotateBytes(TileShape.Shape, TileShape.Pitch, times),
-                    times % 2 == 0 ? TileShape.Pitch : TileShape.Height
-                );
-                this._rectangles = TileShape.convertShapeToRectangles(
-                    TransformedShape, Tile.X, Tile.Y
-                );
+                this.UpdateComputed();
             }
         }
 
@@ -41,10 +36,49 @@ namespace BlocksHero.Tiles
             get => _rectangles;
         }
 
-        public HashSet<TileGroup> Children { get; private set; }
+        public HashSet<TileGroup> Children { get; set; }
 
-        public TileGroup()
+        public TileGroup(Point tile, TileShape tileShape, bool rotatable = false, int layer = 0)
         {
+            Tile = tile;
+            TileShape = tileShape;
+            Rotatable = rotatable;
+            Layer = layer;
+
+            ShapeMask = new byte[tileShape.Length];
+            ShapeMask.Fill<byte>(1);
+        }
+
+        private void UpdateComputed()
+        {
+            uint times = RotateAngle / 90u;
+            byte[] shape = new byte[TileShape.Length];
+
+            for (int i = 0; i < shape.Length; i++)
+            {
+                shape[i] = (byte)(TileShape.Shape[i] & ShapeMask[i]);
+            }
+
+            this._transformedShape = new TileShape(
+                TileShape.RotateBytes(shape, TileShape.Pitch, times),
+                times % 2 == 0 ? TileShape.Pitch : TileShape.Height
+            );
+            this._rectangles = TileShape.convertShapeToRectangles(
+                TransformedShape, Tile.X, Tile.Y
+            );
+        }
+
+        public void MaskTileShape(int x, int y, byte mask)
+        {
+            var index = y * this.TileShape.Pitch + x;
+            var oldValue = this.ShapeMask[index];
+
+            if (oldValue != mask)
+            {
+                this.ShapeMask[index] = mask;
+
+                this.UpdateComputed();
+            }
         }
 
         public static bool Intersect(TileGroup a, TileGroup b)
@@ -79,10 +113,10 @@ namespace BlocksHero.Tiles
                 return false;
             }
 
-            Tile pTile = parent.Tile;
-            Tile cTile = child.Tile;
-            TileShape pShape = parent.TransformedShape;
-            TileShape cShape = child.TransformedShape;
+            var pTile = parent.Tile;
+            var cTile = child.Tile;
+            var pShape = parent.TransformedShape;
+            var cShape = child.TransformedShape;
 
             if (
               pTile.X > cTile.X ||
@@ -94,9 +128,7 @@ namespace BlocksHero.Tiles
                 return false;
             }
 
-            Tile offset;
-
-            Tile.Add(pTile, cTile, out offset);
+            var offset = pTile + cTile;
 
             // there should be a corresponding cell === 1 in parent when child cell === 1
             for (int y = 0; y < cShape.Length; y++)

@@ -84,7 +84,6 @@
   <ItemGroup>
     <CompileShader Include="Effects\ExampleEffect.fx" />
     <Compile Include="Font\FontFace.cs" />
-    <Compile Include="Tiles\Tile.cs" />
     <Compile Include="Tiles\TileGroup.cs" />
     <Compile Include="Tiles\TileShape.cs" />
     <Compile Include="Tiles\TileScene.cs" />

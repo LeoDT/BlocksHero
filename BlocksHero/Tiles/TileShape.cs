@@ -7,8 +7,8 @@ namespace BlocksHero.Tiles
 {
     public struct TileShape
     {
-        public byte[] Shape { get; set; }
-        public int Pitch { get; set; }
+        public byte[] Shape { get; private set; }
+        public int Pitch { get; private set; }
 
         public int Width
         {
@@ -53,10 +53,7 @@ namespace BlocksHero.Tiles
         public TileShape(int width, int height)
         {
             var shape = new byte[width * height];
-            for (int i = 0; i < shape.Length; i++)
-            {
-                shape[i] = 1;
-            }
+            shape.Fill<byte>(1);
 
             Shape = shape;
             Pitch = width;

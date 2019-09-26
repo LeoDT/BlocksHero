@@ -10,5 +10,13 @@ namespace BlocksHero
             else if (val.CompareTo(max) > 0) return max;
             else return val;
         }
+
+        public static void Fill<T>(this T[] arr, T with)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = with;
+            }
+        }
     }
 }

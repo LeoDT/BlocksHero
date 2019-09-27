@@ -3,7 +3,7 @@
   Name = "Power"
   Shape = "One"
   BoardTypeId = 1
-  Cycle = 10
+  Cycle = 3000
 
   [[Output]]
     ResourceTypeId = 1
@@ -14,7 +14,7 @@
   Name = "Attack"
   Shape = "Three"
   BoardTypeId = 1
-  Cycle = 15
+  Cycle = 4000
 
   [[Output]]
     ResourceTypeId = 2
@@ -25,7 +25,7 @@
   Name = "Block"
   Shape = "Five"
   BoardTypeId = 1
-  Cycle = 15
+  Cycle = 4000
 
   [[Output]]
     ResourceTypeId = 3

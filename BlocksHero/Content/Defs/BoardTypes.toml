@@ -3,6 +3,11 @@
   Name = "Constitution"
   Width = 6
   Height = 4
+  Cycle = 3000
+
+  [[Output]]
+    ResourceTypeId = 1
+    Amount = 1
 
 [[BoardType]]
   Id = 2

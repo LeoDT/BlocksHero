@@ -12,9 +12,9 @@ namespace BlocksHero.Definition
     {
         Game Game;
 
-        DefinitionDict<ResourceType> ResourceTypeDefs = new DefinitionDict<ResourceType>();
-        DefinitionDict<NodeType> NodeTypeDefs = new DefinitionDict<NodeType>();
-        DefinitionDict<BoardType> BoardTypeDefs = new DefinitionDict<BoardType>();
+        public DefinitionDict<ResourceType> ResourceTypeDefs = new DefinitionDict<ResourceType>();
+        public DefinitionDict<NodeType> NodeTypeDefs = new DefinitionDict<NodeType>();
+        public DefinitionDict<BoardType> BoardTypeDefs = new DefinitionDict<BoardType>();
 
         public DefinitionService(Game game)
         {

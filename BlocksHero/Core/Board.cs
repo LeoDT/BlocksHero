@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
@@ -16,6 +17,10 @@ namespace BlocksHero.Core
         public Node[] UsedTiles { get; private set; }
         public int[] Durability { get; private set; }
 
+        public Cycler Cycler { get; private set; }
+        public List<Resource> Resources { get; set; }
+        public List<Resource> LockedResources { get; set; }
+
         public Board(BoardType type, Point tile) : this(type, tile, Guid.NewGuid())
         {
         }
@@ -32,6 +37,10 @@ namespace BlocksHero.Core
 
             UsedTiles = new Node[TileGroup.TileShape.Length];
             Durability = new int[TileGroup.TileShape.Length];
+
+            Cycler = new Cycler(type.Cycle);
+            Resources = new List<Resource>();
+            LockedResources = new List<Resource>();
         }
 
         public void AddNode(Node node)
@@ -91,7 +100,7 @@ namespace BlocksHero.Core
             this.TileGroup.Children.Remove(node.TileGroup);
         }
 
-        public void UpdateDurability(int x, int y, int durability)
+        public void SetDurability(int x, int y, int durability)
         {
             var index = y * this.TileGroup.TileShape.Pitch + x;
             var oldValue = this.Durability[index];
@@ -106,6 +115,75 @@ namespace BlocksHero.Core
             else
             {
                 this.TileGroup.MaskTileShape(x, y, 1);
+            }
+        }
+
+        public void AddResource(Resource resource)
+        {
+            var existedResource = this.Resources.Find(r => r.Type == resource.Type);
+
+            if (existedResource != null)
+            {
+                existedResource.Amount += resource.Amount;
+            }
+            else
+            {
+                this.Resources.Add(resource);
+            }
+        }
+
+        public bool RemoveResource(Resource resource)
+        {
+            var existedResource = this.Resources.Find(r => r.Type == resource.Type);
+
+            if (existedResource != null && existedResource.Amount >= resource.Amount)
+            {
+                existedResource.Amount -= resource.Amount;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public Resource LockResource(Resource resource)
+        {
+            var removed = this.RemoveResource(resource);
+
+            if (removed)
+            {
+                return resource;
+            }
+
+            return null;
+        }
+
+        public void UnlockResource(Resource resource)
+        {
+            if (this.LockedResources.Exists(r => r == resource))
+            {
+                this.AddResource(resource);
+                this.LockedResources.Remove(resource);
+            }
+        }
+
+        public void ReleaseResource(Resource resource)
+        {
+            this.LockedResources.Remove(resource);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (this.Cycler.State == CyclerState.Idle)
+            {
+                this.Cycler.Start();
+            }
+
+            this.Cycler.Update(gameTime);
+
+            if (this.Cycler.State == CyclerState.Ready)
+            {
+                this.Cycler.Reset();
             }
         }
     }

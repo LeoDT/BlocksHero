@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BlocksHero.Core
 {
     public class BoardType
@@ -6,6 +8,8 @@ namespace BlocksHero.Core
         public string Name { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public int Cycle { get; set; }
+        public List<ResourceDescriptor> Output { get; set; }
 
         public bool Validate()
         {

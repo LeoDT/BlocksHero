@@ -13,6 +13,7 @@ namespace BlocksHero
         GraphicsDeviceManager graphics;
         FontService fontService;
         DefinitionService defService;
+        Components.Scene ActiveScene;
 
         public BlocksHeroGame()
         {
@@ -50,6 +51,8 @@ namespace BlocksHero
             // (Note how each .fx file has the Build Action "CompileShader", which produces a .fxb file.)
             exampleEffect = new Effect(GraphicsDevice, TitleContainer.ReadAllBytes(@"Effects/ExampleEffect.fxb"));
 
+            this.ActiveScene = new Components.BattleScene(this);
+
             base.LoadContent();
         }
 
@@ -82,11 +85,20 @@ namespace BlocksHero
                     LoadContent();
                 }
             }
+            else if (Input.KeyWentDown(Keys.Escape))
+            {
+                Exit();
+            }
 #endif
 
             //
             // Insert your game update logic here.
             //
+
+            if (this.ActiveScene != null)
+            {
+                this.ActiveScene.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -100,13 +112,22 @@ namespace BlocksHero
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin(0, null, null, null, null);
+            spriteBatch.Begin();
             spriteBatch.Draw(font, new Vector2(20, 20), Color.White);
             spriteBatch.End();
 
-            /* spriteBatch.Begin(0, null, null, null, null);
-            spriteBatch.Draw(smile, new Vector2(20, 20 + font.Height), Color.White);
-            spriteBatch.End(); */
+            spriteBatch.Begin();
+            Primitives.DrawBox(spriteBatch,
+                               new Rectangle(20, 20 + font.Height, 30, 30),
+                               Color.Blue);
+            spriteBatch.End();
+
+            if (this.ActiveScene != null)
+            {
+                spriteBatch.Begin();
+                this.ActiveScene.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }

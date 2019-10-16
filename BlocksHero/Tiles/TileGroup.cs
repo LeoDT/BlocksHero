@@ -5,6 +5,8 @@ namespace BlocksHero.Tiles
 {
     public class TileGroup
     {
+        public TileScene TileScene { get; set; }
+
         public Point Tile { get; set; }
         public TileShape TileShape { get; set; }
         public bool Rotatable { get; set; }
@@ -47,6 +49,8 @@ namespace BlocksHero.Tiles
 
             ShapeMask = new byte[tileShape.Length];
             ShapeMask.Fill<byte>(1);
+
+            this.UpdateComputed();
         }
 
         private void UpdateComputed()

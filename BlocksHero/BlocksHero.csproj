@@ -99,6 +99,11 @@
     <Compile Include="Core\ResourceType.cs" />
     <Compile Include="Core\Board.cs" />
     <Compile Include="Core\Cycler.cs" />
+    <Compile Include="Components\DrawableBoard.cs" />
+    <Compile Include="Primitives.cs" />
+    <Compile Include="Components\Scene.cs" />
+    <Compile Include="Components\IComponent.cs" />
+    <Compile Include="Components\BattleScene.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

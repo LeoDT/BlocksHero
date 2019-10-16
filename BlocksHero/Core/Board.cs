@@ -37,6 +37,7 @@ namespace BlocksHero.Core
 
             UsedTiles = new Node[TileGroup.TileShape.Length];
             Durability = new int[TileGroup.TileShape.Length];
+            Durability.Fill(100);
 
             Cycler = new Cycler(type.Cycle);
             Resources = new List<Resource>();

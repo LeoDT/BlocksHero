@@ -19,46 +19,55 @@ namespace BlocksHero.Tiles
 
         public Rectangle Size { get; set; }
 
-        public Viewport()
+        public Viewport(TileScene tileScene, Point xy, Rectangle size)
         {
+            TileScene = tileScene;
+            _xy = xy;
+            Size = size;
         }
     }
 
     public class TileScene
     {
         public int TilePixelSize { get; private set; }
-        public Rectangle Size { get; private set; }
+        public Rectangle Bounds { get; private set; }
         public Viewport Viewport { get; private set; }
         public HashSet<TileGroup> TileGroups { get; private set; }
 
-        public TileScene(int tilePixelSize, int tileWidth, int tileHeight, int viewportWidth, int viewportHeight)
+        public TileScene(int tilePixelSize,
+                         int tileWidth,
+                         int tileHeight,
+                         Rectangle bounds)
         {
             int width = tileWidth * tilePixelSize;
             int height = tileHeight * tilePixelSize;
 
             TilePixelSize = tilePixelSize;
-            Size = new Rectangle(0, 0, width, height);
-            Viewport = new Viewport
-            {
-                TileScene = this,
-                XY = new Point(
-                    width / 2 - viewportWidth / 2,
-                    height / 2 - viewportHeight / 2
+            Bounds = bounds;
+
+            Viewport = new Viewport(
+                this,
+                new Point(
+                    width / 2 - bounds.Width / 2,
+                    height / 2 - bounds.Height / 2
                 ),
-                Size = new Rectangle(0, 0, viewportWidth, viewportHeight)
-            };
+                new Rectangle(0, 0, bounds.Width, bounds.Height)
+            );
+
+            TileGroups = new HashSet<TileGroup>();
         }
 
         public Point ClampViewportOffset(Point offset)
         {
             return new Point(
-                offset.X.Clamp(0, Size.Width - Viewport.Size.Width),
-                offset.Y.Clamp(0, Size.Height - Viewport.Size.Height)
+                offset.X.Clamp(0, Bounds.Width - Viewport.Size.Width),
+                offset.Y.Clamp(0, Bounds.Height - Viewport.Size.Height)
             );
         }
 
         public bool AddTileGroup(TileGroup tileGroup)
         {
+            tileGroup.TileScene = this;
             return TileGroups.Add(tileGroup);
         }
 
@@ -100,6 +109,14 @@ namespace BlocksHero.Tiles
             }
 
             return true;
+        }
+
+        public Point GetTileGroupPosition(TileGroup tileGroup)
+        {
+            return new Point(
+                tileGroup.Tile.X * this.TilePixelSize,
+                tileGroup.Tile.Y * this.TilePixelSize
+            );
         }
     }
 }
